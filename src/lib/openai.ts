@@ -1,5 +1,6 @@
-import OpenAI from 'openai';
-import { z } from 'zod';
+import OpenAI from "openai";
+import { z } from "zod";
+import { zodResponseFormat } from "openai/helpers/zod";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -49,9 +50,9 @@ export async function extractClausesOpenAI(pdfBuffer: Buffer) {
     try {
       console.log(`Attempt ${attempts + 1} of ${MAX_RETRIES}`);
 
-      const response = await openai.chat.completions.create({
+      const response = await openai.beta.chat.completions.parse({
         model: "gpt-4-vision-preview",
-        response_format: { schema: ResponseSchema.shape },
+        response_format: zodResponseFormat(ResponseSchema, "contract_analysis"),
         messages: [
           {
             role: "system",
@@ -124,14 +125,7 @@ Respond ONLY with JSON in this exact format:
 
       console.log('Received response from OpenAI API');
 
-      const content = response.choices[0]?.message?.content;
-      if (!content) {
-        throw new Error('Empty response from OpenAI');
-      }
-
-      // With response_format: json_object, content is guaranteed to be valid JSON
-      const parsedContent = JSON.parse(content);
-      const validatedContent = ResponseSchema.parse(parsedContent);
+      const validatedContent = response.choices[0].message.parsed;
 
       console.log('Successfully validated response format');
       console.log('Definitions found:', validatedContent.definitions?.length || 0);
