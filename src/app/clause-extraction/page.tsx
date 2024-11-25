@@ -5,33 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { ClauseGroup } from '@/components/ClauseCard';
 import { Sidebar } from '@/components/Sidebar';
 
-interface Clause {
-  type: string;
-  summary: string;
-  text: string;
-  citation: string;
-}
-
-interface PdfMetadata {
-  title?: string;
-  author?: string;
-  subject?: string;
-  keywords?: string;
-  creationDate?: string;
-  modificationDate?: string;
-}
-
-interface Definition {
-  term: string;
-  definition: string;
-  citation: string;
-}
-
-interface AnalysisResult {
-  clauses: Clause[];
-  definitions: Definition[];
-  metadata: PdfMetadata;
-}
+import { AnalysisResult } from '@/lib/models';
 
 export default function ClauseExtraction() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
