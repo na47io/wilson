@@ -6,7 +6,7 @@ const anthropic = new Anthropic({
 
 export async function extractClauses(pdfBuffer: Buffer) {
   const message = await anthropic.beta.messages.create({
-    model: 'claude-3-sonnet-20241022',
+    model: 'claude-3-5-sonnet-20241022',
     betas: ["pdfs-2024-09-25"],
     max_tokens: 4096,
     messages: [{

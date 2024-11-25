@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    
+
     if (!file) {
       return NextResponse.json(
         { error: 'No file provided' },
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const analysis = await extractClauses(buffer);
-    
+
     return NextResponse.json({ analysis });
   } catch (error) {
     console.error('Error processing PDF:', error);
