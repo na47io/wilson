@@ -86,17 +86,21 @@ export async function extractClauses(pdfBuffer: Buffer) {
               text: `Analyze this contract PDF comprehensively following these steps:
 
 1. Thoroughly scan the document for ALL significant legal clauses, including but not limited to:
-   - Payment terms
-   - Confidentiality
-   - Intellectual Property
-   - Termination
-   - Indemnification
-   - Liability
-   - Force Majeure
-   - Governing Law
-   - Dispute Resolution
-   - Assignment
-   - Warranties
+   - Definitions (key terms and their meanings)
+   - Representations & Warranties (statements of fact by parties)
+   - Payment Terms (financial obligations and schedules)
+   - Confidentiality (protection of sensitive information)
+   - Intellectual Property (ownership and rights)
+   - Termination (conditions and process for ending)
+   - Indemnification (compensation obligations)
+   - Liability (limitations and allocations)
+   - Force Majeure (uncontrollable events)
+   - Governing Law (applicable jurisdiction)
+   - Dispute Resolution (conflict handling process)
+   - Assignment (transfer of rights)
+   - Severability (partial invalidity handling)
+   - Amendment (modification process)
+   - Entire Agreement (superseding prior agreements)
    - Any other important clauses you identify
 
 2. For each clause found:
