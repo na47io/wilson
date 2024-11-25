@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractClauses } from '@/lib/anthropic';
-import * as pdfParse from 'pdf-parse';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,9 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const pdfData = await pdfParse(buffer);
-    
-    const analysis = await extractClauses(pdfData.text);
+    const analysis = await extractClauses(buffer);
     
     return NextResponse.json({ analysis });
   } catch (error) {
