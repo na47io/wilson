@@ -39,12 +39,19 @@ interface PdfMetadata {
 }
 
 async function getPdfMetadata(pdfBuffer: Buffer): Promise<PdfMetadata> {
-  // Convert Buffer to Uint8Array for pdf.js compatibility
-  const uint8Array = new Uint8Array(pdfBuffer);
-  const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
-  const pdfDocument = await loadingTask.promise;
-  const metadata = await pdfDocument.getMetadata();
-  return metadata.info;
+  const pdfDoc = await PDFDocument.load(pdfBuffer);
+  const metadata = pdfDoc.getTitle() || pdfDoc.getSubject() || pdfDoc.getAuthor() || pdfDoc.getKeywords() || pdfDoc.getCreator() || pdfDoc.getProducer();
+  
+  return {
+    title: pdfDoc.getTitle(),
+    author: pdfDoc.getAuthor(),
+    subject: pdfDoc.getSubject(),
+    keywords: pdfDoc.getKeywords(),
+    creator: pdfDoc.getCreator(),
+    producer: pdfDoc.getProducer(),
+    creationDate: pdfDoc.getCreationDate()?.toISOString(),
+    modificationDate: pdfDoc.getModificationDate()?.toISOString()
+  };
 }
 
 export async function extractClauses(pdfBuffer: Buffer) {
