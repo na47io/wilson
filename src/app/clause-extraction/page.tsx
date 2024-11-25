@@ -39,7 +39,7 @@ export default function ClauseExtraction() {
   const [status, setStatus] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('anthropic');
+  const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('openai');
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
@@ -56,7 +56,7 @@ export default function ClauseExtraction() {
 
       // Set up SSE connection for status updates first
       const eventSource = new EventSource('/api/extract-clauses/status');
-      
+
       eventSource.onmessage = (event) => {
         setStatus(event.data);
       };
@@ -101,11 +101,11 @@ export default function ClauseExtraction() {
         <h1 className="text-3xl font-bold">Contract Clause Extraction</h1>
         <select
           value={selectedModel}
-          onChange={(e) => setSelectedModel(e.target.value as 'anthropic' | 'openai')}
+          onChange={(e) => setSelectedModel(e.target.value)}
           className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="anthropic">Claude (Anthropic)</option>
-          <option value="openai">GPT-4 Vision (OpenAI)</option>
+          <option value="openai">GPT-4 (OpenAI)</option>
+          <option disabled value="anthropic">Claude (Anthropic)</option>
         </select>
       </div>
 

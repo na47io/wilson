@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { PDFDocument } from 'pdf-lib';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -32,18 +33,7 @@ async function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-interface PdfMetadata {
-  title?: string;
-  author?: string;
-  subject?: string;
-  keywords?: string;
-  creationDate?: string;
-  modificationDate?: string;
-  creator?: string;
-  producer?: string;
-}
-
-export async function extractClausesOpenAI(pdfBuffer: Buffer) {
+export async function extractClausesOpenAI(pdfText: string) {
   let attempts = 0;
 
   while (attempts < MAX_RETRIES) {
@@ -51,20 +41,15 @@ export async function extractClausesOpenAI(pdfBuffer: Buffer) {
       console.log(`Attempt ${attempts + 1} of ${MAX_RETRIES}`);
 
       const response = await openai.beta.chat.completions.parse({
-        model: "gpt-4-vision-preview",
+        model: "gpt-4o",
         response_format: zodResponseFormat(ResponseSchema, "contract_analysis"),
         messages: [
           {
             role: "system",
             content: `You are a contract analysis expert specialized in extracting and structuring legal clauses.
-Extract clauses and definitions precisely following the provided JSON schema.`
-          },
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: `Analyze this contract PDF in two steps:
+Extract clauses and definitions precisely following the provided JSON schema.
+
+Analyze this contract PDF in two steps:
 
 1. First, extract all defined terms:
    - Look for a dedicated "Definitions" or "Terms" section
@@ -109,14 +94,16 @@ Respond ONLY with JSON in this exact format:
       "citation": "Page 2, Section 1.3"
     }
   ]
-}`
-              },
+}
+`
+          },
+          {
+            role: "user",
+            content: [
               {
-                type: "image_url",
-                image_url: {
-                  url: `data:application/pdf;base64,${pdfBuffer.toString('base64')}`
-                }
-              }
+                type: "text",
+                text: pdfText
+              },
             ]
           }
         ],
@@ -128,12 +115,12 @@ Respond ONLY with JSON in this exact format:
       const validatedContent = response.choices[0].message.parsed;
 
       console.log('Successfully validated response format');
-      console.log('Definitions found:', validatedContent.definitions?.length || 0);
-      console.log('Clauses found:', validatedContent.clauses?.length || 0);
+      console.log('Definitions found:', validatedContent?.definitions?.length || 0);
+      console.log('Clauses found:', validatedContent?.clauses?.length || 0);
 
       return {
         ...validatedContent,
-        definitions: validatedContent.definitions || []
+        definitions: validatedContent?.definitions || []
       };
 
     } catch (error) {
