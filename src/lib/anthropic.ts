@@ -30,5 +30,9 @@ export async function extractClauses(pdfBuffer: Buffer) {
   });
 
   console.log('Received response from Anthropic API');
-  return message.content;
+  // Convert the content array to a string if needed
+  const content = Array.isArray(message.content) 
+    ? message.content.map(item => item.text).join('\n')
+    : message.content[0]?.text || '';
+  return content;
 }
