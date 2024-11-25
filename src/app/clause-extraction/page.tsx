@@ -152,40 +152,6 @@ export default function ClauseExtraction() {
 
       {analysis && (
         <div className="mt-8 space-y-12">
-          {analysis.definitions && analysis.definitions.length > 0 && (
-            <section>
-              <div className="flex items-center space-x-2 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Definitions</h2>
-                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
-                  {analysis.definitions.length} {analysis.definitions.length === 1 ? 'term' : 'terms'}
-                </span>
-              </div>
-              <div className="grid gap-4">
-                {analysis.definitions.map((def, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{def.term}</h3>
-                    <p className="text-gray-600 mb-4">{def.definition}</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="mr-2"
-                      >
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                      </svg>
-                      <span>{def.citation}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
           {analysis.metadata && (
             <div className="mb-8 bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-xl font-semibold mb-4">Document Information</h2>
@@ -226,6 +192,40 @@ export default function ClauseExtraction() {
                 )}
               </div>
             </div>
+          )}
+          {analysis.definitions && analysis.definitions.length > 0 && (
+            <section>
+              <div className="flex items-center space-x-2 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Definitions</h2>
+                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
+                  {analysis.definitions.length} {analysis.definitions.length === 1 ? 'term' : 'terms'}
+                </span>
+              </div>
+              <div className="grid gap-4">
+                {analysis.definitions.map((def, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{def.term}</h3>
+                    <p className="text-gray-600 mb-4">{def.definition}</p>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="mr-2"
+                      >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      <span>{def.citation}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
           <ClauseGroup
             clauses={analysis.clauses}
