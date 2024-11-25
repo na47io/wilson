@@ -27,7 +27,7 @@ export default function ClauseExtraction() {
     setLoading(true);
     setError(null);
     setAnalysis(null);
-    
+
     try {
       const formData = new FormData();
       formData.append('file', acceptedFiles[0]);
@@ -61,7 +61,7 @@ export default function ClauseExtraction() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-3xl font-bold mb-8">Contract Clause Extraction</h1>
-      
+
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors
@@ -85,12 +85,12 @@ export default function ClauseExtraction() {
       {error && (
         <div className="mt-8 p-4 bg-red-50 text-red-700 rounded-lg">
           <div className="flex items-center space-x-2">
-            <svg 
-              width="20" 
-              height="20" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
               strokeWidth="2"
               className="text-red-500"
             >
@@ -105,7 +105,7 @@ export default function ClauseExtraction() {
 
       {analysis && (
         <div className="mt-8">
-          <ClauseGroup 
+          <ClauseGroup
             clauses={analysis.clauses}
             missingTypes={analysis.missingTypes}
           />
