@@ -19,12 +19,13 @@ export async function POST(request: NextRequest) {
     console.log(`Processing PDF file: ${file.name} (${buffer.length} bytes)`);
     
     // Update status through the global EventSource
-    const { clauses, missing_types, metadata } = await extractClauses(buffer);
-    console.log('Successfully extracted clauses from PDF');
+    const { clauses, missing_types, metadata, definitions } = await extractClauses(buffer);
+    console.log('Successfully extracted clauses and definitions from PDF');
     
     return NextResponse.json({ 
       clauses,
-      metadata
+      metadata,
+      definitions
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
