@@ -89,10 +89,17 @@ export async function extractClauses(pdfBuffer: Buffer) {
             },
             {
               type: 'text',
-              text: `Analyze this contract PDF comprehensively following these steps:
+              text: `Analyze this contract PDF in two steps:
 
-1. Thoroughly scan the document for ALL significant legal clauses, including but not limited to:
-   - Definitions (key terms and their meanings)
+1. First, extract all defined terms:
+   - Look for a dedicated "Definitions" or "Terms" section
+   - Find any inline definitions throughout the document
+   - For each definition, capture:
+     * The exact term being defined
+     * The complete definition text
+     * The precise location (page/section)
+
+2. Then scan for ALL significant legal clauses, including but not limited to:
    - Representations & Warranties (statements of fact by parties)
    - Payment Terms (financial obligations and schedules)
    - Confidentiality (protection of sensitive information)
