@@ -16,18 +16,17 @@ export async function extractClauses(pdfBuffer: Buffer) {
           text: 'Please analyze this contract PDF and extract all clauses, categorizing them by type (e.g. arbitration, confidentiality, etc). For each clause, provide:\n1. The clause type\n2. A brief description\n3. The exact text of the clause'
         },
         {
-          type: 'file',
-          file_path: {
-            file_id: 'temp',
-            data: pdfBuffer
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'application/pdf',
+            data: pdfBuffer.toString('base64')
           }
         }
       ]
     }],
   }, {
-    headers: {
-      'anthropic-beta': 'pdfs-2024-09-25'
-    }
+    beta: true
   });
 
   return message.content;
