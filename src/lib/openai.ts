@@ -6,7 +6,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Use the same schemas as anthropic.ts for consistency
 const ClauseSchema = z.object({
   type: z.string(),
   summary: z.string(),
