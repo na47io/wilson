@@ -1,22 +1,23 @@
-FROM node:20-alpine
-
+# Build stage
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Install build dependencies
-RUN apk add --no-cache python3 make g++ git
-
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy project files
 COPY . .
-
-# Build the application
 RUN npm run build
 
-EXPOSE 3000
+# Production stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV production
 
-CMD ["npm", "start"]
+COPY --from=builder /app/next.config.ts ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+RUN mkdir /app/data
+
+EXPOSE 3000
+ENV PORT 3000
+CMD ["node", "server.js"]

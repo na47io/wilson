@@ -5,3 +5,5 @@ scripts
 node_modules
 .env
 *.db
+.next
+.aider*
