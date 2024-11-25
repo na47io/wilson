@@ -6,9 +6,8 @@ export async function GET(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const analysisId = parseInt(id);
-    console.log(id)
     if (isNaN(analysisId)) {
       return NextResponse.json(
         { error: 'Invalid ID' },
