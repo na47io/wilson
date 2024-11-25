@@ -25,9 +25,16 @@ export async function POST(request: NextRequest) {
     const { clauses, definitions } = await extractClausesOpenAI(data.text)
     console.log('Successfully extracted clauses and definitions from PDF');
 
+
     return NextResponse.json({
       clauses,
-      metadata: data.metadata,
+      metadata: {
+        title: data.info.Title,
+        author: data.info.Author,
+        subject: data.info.Subject,
+        creationDate: data.info.CreationDate,
+        modificationDate: data.info.ModDate,
+      },
       definitions
     });
   } catch (error) {
