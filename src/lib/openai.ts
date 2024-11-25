@@ -51,14 +51,12 @@ export async function extractClausesOpenAI(pdfBuffer: Buffer) {
 
       const response = await openai.chat.completions.create({
         model: "gpt-4-vision-preview",
+        response_format: { type: "json_object" },
         messages: [
           {
             role: "system",
-            content: `You are a contract analysis expert specialized in extracting and structuring legal clauses. You must:
-1. Always respond with valid JSON only
-2. Follow the exact schema provided
-3. Be thorough and precise in clause identification
-4. Validate your response before sending`
+            content: `You are a contract analysis expert specialized in extracting and structuring legal clauses.
+Extract clauses and definitions precisely following the provided JSON schema.`
           },
           {
             role: "user",
@@ -131,6 +129,7 @@ Respond ONLY with JSON in this exact format:
         throw new Error('Empty response from OpenAI');
       }
 
+      // With response_format: json_object, content is guaranteed to be valid JSON
       const parsedContent = JSON.parse(content);
       const validatedContent = ResponseSchema.parse(parsedContent);
 
