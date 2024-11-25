@@ -46,12 +46,7 @@ export default function ClauseExtraction() {
       const formData = new FormData();
       formData.append('file', acceptedFiles[0]);
 
-      const response = await fetch('/api/extract-clauses', {
-        method: 'POST',
-        body: formData,
-      });
-
-      // Set up SSE connection for status updates
+      // Set up SSE connection for status updates first
       const eventSource = new EventSource('/api/extract-clauses/status');
       
       eventSource.onmessage = (event) => {
@@ -62,11 +57,19 @@ export default function ClauseExtraction() {
         eventSource.close();
       };
 
+      // Then start the extraction process
+      const response = await fetch('/api/extract-clauses', {
+        method: 'POST',
+        body: formData,
+      });
+
       if (!response.ok) {
+        eventSource.close();
         throw new Error('Failed to process PDF');
       }
 
       const data = await response.json();
+      eventSource.close();
       setAnalysis(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
