@@ -16,7 +16,7 @@ export function ClauseCard({ clause }: ClauseCardProps) {
 
   return (
     <div className="border border-gray-200 rounded-lg p-6 mb-4 hover:shadow-lg transition-all duration-200 bg-white">
-      <div 
+      <div
         className="flex justify-between items-start cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -24,16 +24,16 @@ export function ClauseCard({ clause }: ClauseCardProps) {
           <h3 className="text-lg font-semibold text-gray-900 mb-3">{clause.type}</h3>
           <p className="text-gray-600 leading-relaxed">{clause.summary}</p>
         </div>
-        <button 
+        <button
           className={`p-2 rounded-full transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
           aria-label={isExpanded ? 'Collapse' : 'Expand'}
         >
-          <svg 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
             strokeWidth="2"
             className="text-gray-400"
           >
@@ -41,7 +41,7 @@ export function ClauseCard({ clause }: ClauseCardProps) {
           </svg>
         </button>
       </div>
-      
+
       {isExpanded && (
         <div className="mt-6 border-t border-gray-100 pt-6 space-y-4">
           <div className="bg-gray-50 p-6 rounded-lg">
@@ -51,12 +51,12 @@ export function ClauseCard({ clause }: ClauseCardProps) {
             </p>
           </div>
           <div className="flex items-center text-sm text-gray-500">
-            <svg 
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
               strokeWidth="2"
               className="mr-2"
             >
@@ -106,17 +106,17 @@ export function ClauseGroup({ clauses, missingTypes }: ClauseGroupProps) {
             </div>
           </section>
         ))}
-        
+
         {missingTypes.length > 0 && (
           <section className="mt-8">
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
               <div className="flex items-center space-x-2 mb-4">
-                <svg 
-                  width="20" 
-                  height="20" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   strokeWidth="2"
                   className="text-amber-500"
                 >
@@ -129,12 +129,12 @@ export function ClauseGroup({ clauses, missingTypes }: ClauseGroupProps) {
               <ul className="space-y-2">
                 {missingTypes.map((type) => (
                   <li key={type} className="flex items-center text-amber-700">
-                    <svg 
-                      width="16" 
-                      height="16" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
                       strokeWidth="2"
                       className="mr-2"
                     >
@@ -149,7 +149,6 @@ export function ClauseGroup({ clauses, missingTypes }: ClauseGroupProps) {
           </section>
         )}
       </div>
-      )}
     </div>
   );
 }
