@@ -18,10 +18,13 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     console.log(`Processing PDF file: ${file.name} (${buffer.length} bytes)`);
     
-    const analysis = await extractClauses(buffer);
+    const { clauses, missing_types } = await extractClauses(buffer);
     console.log('Successfully extracted clauses from PDF');
     
-    return NextResponse.json({ analysis });
+    return NextResponse.json({ 
+      clauses,
+      missingTypes: missing_types 
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error processing PDF:', error);

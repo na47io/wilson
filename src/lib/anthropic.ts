@@ -23,16 +23,23 @@ export async function extractClauses(pdfBuffer: Buffer) {
         },
         {
           type: 'text',
-          text: 'Analyze this contract PDF and extract the following critical clauses:\n\n1. Indemnification clauses\n2. Termination clauses\n3. Liability clauses\n\nFor each clause found, provide:\n- Clause Type (one of the above)\n- Brief summary of the clause\'s key points (2-3 sentences)\n- The complete verbatim text of the clause\n\nIf any of these clause types are not found in the document, explicitly state that they are missing. Format the response in a clear, structured way with clear separation between different clauses.'
+          text: 'Analyze this contract PDF and extract the following critical clauses:\n\n1. Indemnification clauses\n2. Termination clauses\n3. Liability clauses\n\nFor each clause found, provide the information in this exact JSON format:\n\n{\n  "clauses": [\n    {\n      "type": "<clause type>",\n      "summary": "<2-3 sentence summary>",\n      "text": "<exact quote from document>",\n      "citation": "<page number and location>"\n    }\n  ],\n  "missing_types": ["<list of clause types not found>"]\n}\n\nRules:\n- Include page numbers and locations for every clause\n- Quote the exact text from the document\n- Use consistent clause type names\n- If a clause type is not found, include it in missing_types\n- Ensure valid JSON format'
         }
       ]
     }]
   });
 
   console.log('Received response from Anthropic API');
-  // Convert the content array to a string if needed
   const content = Array.isArray(message.content) 
     ? message.content.map(item => item.text).join('\n')
     : message.content[0]?.text || '';
-  return content;
+    
+  try {
+    // Parse the JSON response
+    const parsedContent = JSON.parse(content);
+    return parsedContent;
+  } catch (error) {
+    console.error('Failed to parse Anthropic response as JSON:', error);
+    throw new Error('Invalid response format from AI');
+  }
 }
