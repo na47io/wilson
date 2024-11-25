@@ -13,8 +13,15 @@ const ClauseSchema = z.object({
   citation: z.string(),
 });
 
+const DefinitionSchema = z.object({
+  term: z.string(),
+  definition: z.string(),
+  citation: z.string(),
+});
+
 const ResponseSchema = z.object({
   clauses: z.array(ClauseSchema),
+  definitions: z.array(DefinitionSchema),
 });
 
 const MAX_RETRIES = 3;
@@ -151,10 +158,13 @@ Validation checklist:
       const validatedContent = ResponseSchema.parse(parsedContent);
 
       console.log('Successfully validated response format');
-      console.log(validatedContent)
+      console.log('Definitions found:', validatedContent.definitions?.length || 0);
+      console.log('Clauses found:', validatedContent.clauses?.length || 0);
+      
       return {
         ...validatedContent,
-        metadata
+        metadata,
+        definitions: validatedContent.definitions || []
       };
 
     } catch (error) {
