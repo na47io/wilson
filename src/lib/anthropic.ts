@@ -22,7 +22,7 @@ export async function extractClauses(pdfBuffer: Buffer) {
         },
         {
           type: 'text',
-          text: 'Please analyze this contract PDF and extract all clauses, categorizing them by type (e.g. arbitration, confidentiality, etc). For each clause, provide:\n1. The clause type\n2. A brief description\n3. The exact text of the clause'
+          text: 'Analyze this contract PDF and extract the following critical clauses:\n\n1. Indemnification clauses\n2. Termination clauses\n3. Liability clauses\n\nFor each clause found, provide:\n- Clause Type (one of the above)\n- Brief summary of the clause\'s key points (2-3 sentences)\n- The complete verbatim text of the clause\n\nIf any of these clause types are not found in the document, explicitly state that they are missing. Format the response in a clear, structured way with clear separation between different clauses.'
         }
       ]
     }]
