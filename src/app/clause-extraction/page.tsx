@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ClauseGroup } from '@/components/ClauseCard';
+import { Sidebar } from '@/components/Sidebar';
 
 interface Clause {
   type: string;
@@ -40,6 +41,7 @@ export default function ClauseExtraction() {
   const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('openai');
   const [isDefinitionsExpanded, setIsDefinitionsExpanded] = useState(true);
   const [isClausesExpanded, setIsClausesExpanded] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
@@ -95,10 +97,47 @@ export default function ClauseExtraction() {
     maxFiles: 1,
   });
 
+  const loadSavedAnalysis = async (id: number) => {
+    try {
+      const response = await fetch(`/api/extract-clauses/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setAnalysis(data);
+        setIsSidebarOpen(false);
+      }
+    } catch (error) {
+      console.error('Error loading analysis:', error);
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl relative">
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onSelectDocument={loadSavedAnalysis}
+      />
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Contract Clause Extraction</h1>
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 rounded-lg hover:bg-gray-100"
+            aria-label="Open saved documents"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-gray-600"
+            >
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
+          <h1 className="text-3xl font-bold">Contract Clause Extraction</h1>
+        </div>
         <select
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}

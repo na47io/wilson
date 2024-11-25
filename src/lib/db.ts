@@ -42,3 +42,9 @@ export async function getAnalysis(id: number) {
   }
   return result;
 }
+
+export async function getAllAnalyses() {
+  const db = await getDb();
+  const results = await db.all('SELECT id, filename, created_at FROM analysis_results ORDER BY created_at DESC');
+  return results;
+}
