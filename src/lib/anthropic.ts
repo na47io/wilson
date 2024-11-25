@@ -30,10 +30,11 @@ export async function extractClauses(pdfBuffer: Buffer) {
   });
 
   console.log('Received response from Anthropic API');
-  const content = Array.isArray(message.content) 
+  console.log(message.content)
+  const content = Array.isArray(message.content)
     ? message.content.map(item => item.text).join('\n')
     : message.content[0]?.text || '';
-    
+
   try {
     // Parse the JSON response
     const parsedContent = JSON.parse(content);
