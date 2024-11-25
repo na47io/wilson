@@ -30,15 +30,17 @@ interface AnalysisResult {
 
 export default function ClauseExtraction() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
 
-    setLoading(true);
+    setIsProcessing(true);
     setError(null);
     setAnalysis(null);
+    setStatus('Uploading PDF...');
 
     try {
       const formData = new FormData();
@@ -49,6 +51,17 @@ export default function ClauseExtraction() {
         body: formData,
       });
 
+      // Set up SSE connection for status updates
+      const eventSource = new EventSource('/api/extract-clauses/status');
+      
+      eventSource.onmessage = (event) => {
+        setStatus(event.data);
+      };
+
+      eventSource.onerror = () => {
+        eventSource.close();
+      };
+
       if (!response.ok) {
         throw new Error('Failed to process PDF');
       }
@@ -58,7 +71,8 @@ export default function ClauseExtraction() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
-      setLoading(false);
+      setIsProcessing(false);
+      setStatus('');
     }
   }, []);
 
@@ -87,10 +101,10 @@ export default function ClauseExtraction() {
         </p>
       </div>
 
-      {loading && (
+      {isProcessing && (
         <div className="mt-8 text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
-          <p className="mt-4 text-gray-600">Analyzing contract...</p>
+          <p className="mt-4 text-gray-600">{status || 'Processing...'}</p>
         </div>
       )}
 
