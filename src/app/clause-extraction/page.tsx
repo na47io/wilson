@@ -39,6 +39,7 @@ export default function ClauseExtraction() {
   const [status, setStatus] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('anthropic');
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
@@ -51,6 +52,7 @@ export default function ClauseExtraction() {
     try {
       const formData = new FormData();
       formData.append('file', acceptedFiles[0]);
+      formData.append('model', selectedModel);
 
       // Set up SSE connection for status updates first
       const eventSource = new EventSource('/api/extract-clauses/status');
@@ -95,7 +97,17 @@ export default function ClauseExtraction() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8">Contract Clause Extraction</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Contract Clause Extraction</h1>
+        <select
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.target.value as 'anthropic' | 'openai')}
+          className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="anthropic">Claude (Anthropic)</option>
+          <option value="openai">GPT-4 Vision (OpenAI)</option>
+        </select>
+      </div>
 
       <div
         {...getRootProps()}
