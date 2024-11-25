@@ -7,6 +7,7 @@ export async function GET(
 ) {
   try {
     const id = parseInt(params.id);
+    console.log(id)
     if (isNaN(id)) {
       return NextResponse.json(
         { error: 'Invalid ID' },
