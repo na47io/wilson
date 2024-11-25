@@ -132,6 +132,13 @@ Respond ONLY with JSON in this exact format:
       "citation": "Page 3, Section 4.1, Paragraph 2"
     }
   ],
+  "definitions": [
+    {
+      "term": "Confidential Information",
+      "definition": "Any non-public information relating to the business, technology, or operations of either party...",
+      "citation": "Page 2, Section 1.3"
+    }
+  ],
   "missing_types": ["Force Majeure", "Assignment"]
 }
 
