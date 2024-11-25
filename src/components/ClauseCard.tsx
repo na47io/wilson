@@ -74,10 +74,9 @@ export function ClauseCard({ clause }: ClauseCardProps) {
 
 interface ClauseGroupProps {
   clauses: Clause[];
-  missingTypes: string[];
 }
 
-export function ClauseGroup({ clauses, missingTypes }: ClauseGroupProps) {
+export function ClauseGroup({ clauses }: ClauseGroupProps) {
   // Group clauses by type
   const groupedClauses = clauses.reduce((acc, clause) => {
     const type = clause.type;
@@ -106,48 +105,6 @@ export function ClauseGroup({ clauses, missingTypes }: ClauseGroupProps) {
             </div>
           </section>
         ))}
-
-        {missingTypes.length > 0 && (
-          <section className="mt-8">
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
-              <div className="flex items-center space-x-2 mb-4">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-amber-500"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                <h2 className="text-lg font-semibold text-amber-800">Missing Clause Types</h2>
-              </div>
-              <ul className="space-y-2">
-                {missingTypes.map((type) => (
-                  <li key={type} className="flex items-center text-amber-700">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="mr-2"
-                    >
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                      <polyline points="22 4 12 14.01 9 11.01" />
-                    </svg>
-                    {type}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );

@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ 
       clauses,
-      missingTypes: missing_types,
       metadata
     });
   } catch (error) {

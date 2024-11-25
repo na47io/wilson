@@ -24,7 +24,6 @@ interface PdfMetadata {
 
 interface AnalysisResult {
   clauses: Clause[];
-  missingTypes: string[];
   metadata: PdfMetadata;
 }
 
@@ -177,7 +176,6 @@ export default function ClauseExtraction() {
           )}
           <ClauseGroup
             clauses={analysis.clauses}
-            missingTypes={analysis.missingTypes}
           />
         </div>
       )}

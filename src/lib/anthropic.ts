@@ -15,7 +15,6 @@ const ClauseSchema = z.object({
 
 const ResponseSchema = z.object({
   clauses: z.array(ClauseSchema),
-  missing_types: z.array(z.string()),
 });
 
 const MAX_RETRIES = 3;
