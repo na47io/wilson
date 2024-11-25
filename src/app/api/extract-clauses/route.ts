@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractClausesOpenAI } from '@/lib/openai';
+import { saveAnalysis } from '@/lib/db';
 import pdf from 'pdf-parse';
 
 export async function POST(request: NextRequest) {
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
     console.log('Successfully extracted clauses and definitions from PDF');
 
 
-    return NextResponse.json({
+    const result = {
       clauses,
       metadata: {
         title: data.info.Title,
@@ -36,7 +37,12 @@ export async function POST(request: NextRequest) {
         modificationDate: data.info.ModDate,
       },
       definitions
-    });
+    };
+
+    // Save to database
+    await saveAnalysis(file.name, result);
+
+    return NextResponse.json(result);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error processing PDF:', error);
