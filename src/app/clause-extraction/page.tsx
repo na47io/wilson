@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ClauseGroup } from '@/components/ClauseCard';
 import { Sidebar } from '@/components/Sidebar';
@@ -38,7 +38,6 @@ export default function ClauseExtraction() {
   const [status, setStatus] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('openai');
   const [isDefinitionsExpanded, setIsDefinitionsExpanded] = useState(true);
   const [isClausesExpanded, setIsClausesExpanded] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -54,7 +53,7 @@ export default function ClauseExtraction() {
     try {
       const formData = new FormData();
       formData.append('file', acceptedFiles[0]);
-      formData.append('model', selectedModel);
+      formData.append('model', 'openai');
 
       // Set up SSE connection for status updates first
       const eventSource = new EventSource('/api/extract-clauses/status');
@@ -138,14 +137,6 @@ export default function ClauseExtraction() {
           </button>
           <h1 className="text-3xl font-bold">Contract Clause Extraction</h1>
         </div>
-        <select
-          value={selectedModel}
-          onChange={(e) => setSelectedModel(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="openai">GPT-4 (OpenAI)</option>
-          <option disabled value="anthropic">Claude (Anthropic)</option>
-        </select>
       </div>
 
       <div
