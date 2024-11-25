@@ -3,19 +3,20 @@ import { getAnalysis } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = context.params;
+    const analysisId = parseInt(id);
     console.log(id)
-    if (isNaN(id)) {
+    if (isNaN(analysisId)) {
       return NextResponse.json(
         { error: 'Invalid ID' },
         { status: 400 }
       );
     }
 
-    const analysis = await getAnalysis(id);
+    const analysis = await getAnalysis(analysisId);
     if (!analysis) {
       return NextResponse.json(
         { error: 'Analysis not found' },
