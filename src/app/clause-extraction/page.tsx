@@ -11,9 +11,21 @@ interface Clause {
   citation: string;
 }
 
+interface PdfMetadata {
+  title?: string;
+  author?: string;
+  subject?: string;
+  keywords?: string;
+  creationDate?: string;
+  modificationDate?: string;
+  creator?: string;
+  producer?: string;
+}
+
 interface AnalysisResult {
   clauses: Clause[];
   missingTypes: string[];
+  metadata: PdfMetadata;
 }
 
 export default function ClauseExtraction() {
@@ -105,6 +117,47 @@ export default function ClauseExtraction() {
 
       {analysis && (
         <div className="mt-8">
+          {analysis.metadata && (
+            <div className="mb-8 bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-semibold mb-4">Document Information</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {analysis.metadata.title && (
+                  <div>
+                    <span className="font-medium text-gray-600">Title:</span>
+                    <p className="text-gray-800">{analysis.metadata.title}</p>
+                  </div>
+                )}
+                {analysis.metadata.author && (
+                  <div>
+                    <span className="font-medium text-gray-600">Author:</span>
+                    <p className="text-gray-800">{analysis.metadata.author}</p>
+                  </div>
+                )}
+                {analysis.metadata.subject && (
+                  <div>
+                    <span className="font-medium text-gray-600">Subject:</span>
+                    <p className="text-gray-800">{analysis.metadata.subject}</p>
+                  </div>
+                )}
+                {analysis.metadata.creationDate && (
+                  <div>
+                    <span className="font-medium text-gray-600">Created:</span>
+                    <p className="text-gray-800">
+                      {new Date(analysis.metadata.creationDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+                {analysis.metadata.modificationDate && (
+                  <div>
+                    <span className="font-medium text-gray-600">Modified:</span>
+                    <p className="text-gray-800">
+                      {new Date(analysis.metadata.modificationDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           <ClauseGroup
             clauses={analysis.clauses}
             missingTypes={analysis.missingTypes}

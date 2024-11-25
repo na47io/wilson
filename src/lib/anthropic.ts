@@ -25,7 +25,28 @@ async function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+import * as pdfjsLib from 'pdfjs-dist';
+
+interface PdfMetadata {
+  title?: string;
+  author?: string;
+  subject?: string;
+  keywords?: string;
+  creationDate?: string;
+  modificationDate?: string;
+  creator?: string;
+  producer?: string;
+}
+
+async function getPdfMetadata(pdfBuffer: Buffer): Promise<PdfMetadata> {
+  const loadingTask = pdfjsLib.getDocument({ data: pdfBuffer });
+  const pdfDocument = await loadingTask.promise;
+  const metadata = await pdfDocument.getMetadata();
+  return metadata.info;
+}
+
 export async function extractClauses(pdfBuffer: Buffer) {
+  const metadata = await getPdfMetadata(pdfBuffer);
   let attempts = 0;
 
   while (attempts < MAX_RETRIES) {
@@ -119,7 +140,10 @@ Validation checklist:
 
       console.log('Successfully validated response format');
       console.log(validatedContent)
-      return validatedContent;
+      return {
+        ...validatedContent,
+        metadata
+      };
 
     } catch (error) {
       attempts++;
