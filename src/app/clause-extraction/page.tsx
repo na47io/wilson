@@ -18,8 +18,6 @@ interface PdfMetadata {
   keywords?: string;
   creationDate?: string;
   modificationDate?: string;
-  creator?: string;
-  producer?: string;
 }
 
 interface Definition {
@@ -196,8 +194,8 @@ export default function ClauseExtraction() {
             </div>
           )}
           {analysis.definitions && analysis.definitions.length > 0 && (
-            <section className="border border-gray-200 rounded-lg p-6 bg-white">
-              <div 
+            <section className="rounded-lg p-6 bg-white grid gap-4">
+              <div
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => setIsDefinitionsExpanded(!isDefinitionsExpanded)}
               >
@@ -225,35 +223,35 @@ export default function ClauseExtraction() {
                 </button>
               </div>
               {isDefinitionsExpanded && (
-              <div className="grid gap-4">
-                {analysis.definitions.map((def, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{def.term}</h3>
-                    <p className="text-gray-600 mb-4">{def.definition}</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="mr-2"
-                      >
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                      </svg>
-                      <span>{def.citation}</span>
+                <div className="grid gap-4">
+                  {analysis.definitions.map((def, index) => (
+                    <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{def.term}</h3>
+                      <p className="text-gray-600 mb-4">{def.definition}</p>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="mr-2"
+                        >
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>{def.citation}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
               )}
             </section>
           )}
-          <section className="border border-gray-200 rounded-lg p-6 bg-white">
-            <div 
+          <section className="rounded-lg p-6 bg-white grid gap-4">
+            <div
               className="flex items-center justify-between cursor-pointer mb-8"
               onClick={() => setIsClausesExpanded(!isClausesExpanded)}
             >

@@ -93,7 +93,7 @@ export function ClauseGroup({ clauses }: ClauseGroupProps) {
         {Object.entries(groupedClauses).map(([type, clauses]) => (
           <section key={type} className="space-y-4">
             <div className="flex items-center space-x-2">
-              <h2 className="text-2xl font-bold text-gray-900">{type}</h2>
+              <h2 className="text-xl font-bold text-gray-900">{type}</h2>
               <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
                 {clauses.length} {clauses.length === 1 ? 'clause' : 'clauses'}
               </span>
