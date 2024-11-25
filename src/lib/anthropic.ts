@@ -39,7 +39,9 @@ interface PdfMetadata {
 }
 
 async function getPdfMetadata(pdfBuffer: Buffer): Promise<PdfMetadata> {
-  const loadingTask = pdfjsLib.getDocument({ data: pdfBuffer });
+  // Convert Buffer to Uint8Array for pdf.js compatibility
+  const uint8Array = new Uint8Array(pdfBuffer);
+  const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
   const pdfDocument = await loadingTask.promise;
   const metadata = await pdfDocument.getMetadata();
   return metadata.info;
