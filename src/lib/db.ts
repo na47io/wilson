@@ -7,7 +7,7 @@ let db: Database | null = null;
 export async function getDb() {
   if (!db) {
     db = await open({
-      filename: './analysis.db',
+      filename: './data/analysis.db',
       driver: sqlite3.Database
     });
 
