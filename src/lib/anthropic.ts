@@ -35,7 +35,11 @@ export async function extractClauses(pdfBuffer: Buffer) {
         model: 'claude-3-5-sonnet-20241022',
         betas: ["pdfs-2024-09-25"],
         max_tokens: 4096,
-        system: "You are a contract analysis expert. Always respond with valid JSON matching the specified schema. Be thorough and precise.",
+        system: `You are a contract analysis expert specialized in extracting and structuring legal clauses. You must:
+1. Always respond with valid JSON only
+2. Follow the exact schema provided
+3. Be thorough and precise in clause identification
+4. Validate your response before sending`,
         messages: [{
           role: 'user',
           content: [
@@ -49,32 +53,46 @@ export async function extractClauses(pdfBuffer: Buffer) {
             },
             {
               type: 'text',
-              text: `Analyze this contract PDF and extract the following critical clauses:
+              text: `Follow these steps to analyze the contract PDF:
 
-1. Indemnification clauses
-2. Termination clauses
-3. Liability clauses
+1. First, scan the document for these specific clause types:
+   - Indemnification clauses
+   - Termination clauses
+   - Liability clauses
 
-Respond ONLY with JSON in this exact format, no other text:
+2. For each clause found:
+   - Extract the exact text
+   - Write a clear 2-3 sentence summary
+   - Note the precise page number and location
+   - Validate it matches the expected type
+
+3. Before responding:
+   - Verify each clause is correctly categorized
+   - Check that all citations are complete
+   - Ensure the JSON structure is valid
+   - List any clause types not found
+
+Respond ONLY with JSON in this exact format:
 
 {
   "clauses": [
     {
-      "type": "string (one of: Indemnification, Termination, or Liability)",
-      "summary": "string (2-3 sentence summary)",
-      "text": "string (exact quote from document)",
-      "citation": "string (page number and location)"
+      "type": "Indemnification",
+      "summary": "The vendor agrees to indemnify the client against all losses. This includes coverage for third-party claims and legal fees. The indemnification excludes cases of client negligence.",
+      "text": "Vendor shall indemnify and hold harmless the Client...",
+      "citation": "Page 12, Section 8.2, Paragraph 3"
     }
   ],
-  "missing_types": ["string (list of clause types not found)"]
+  "missing_types": ["Liability"]
 }
 
-Rules:
-- Include page numbers and locations for every clause
-- Quote the exact text from the document
-- Use consistent clause type names (Indemnification, Termination, Liability)
-- If a clause type is not found, include it in missing_types
-- Response must be valid JSON`
+Validation checklist:
+✓ Each clause has exactly one type: Indemnification, Termination, or Liability
+✓ Summaries are 2-3 complete sentences
+✓ Text contains exact quotes only
+✓ Citations include page number and specific location
+✓ Missing_types lists any unfound clause types
+✓ Output is valid JSON with no additional text`
             }
           ]
         }]
