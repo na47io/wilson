@@ -41,6 +41,7 @@ export default function ClauseExtraction() {
   const [error, setError] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<'anthropic' | 'openai'>('openai');
   const [isDefinitionsExpanded, setIsDefinitionsExpanded] = useState(true);
+  const [isClausesExpanded, setIsClausesExpanded] = useState(true);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
@@ -251,9 +252,40 @@ export default function ClauseExtraction() {
               )}
             </section>
           )}
-          <ClauseGroup
-            clauses={analysis.clauses}
-          />
+          <section className="border border-gray-200 rounded-lg p-6 bg-white">
+            <div 
+              className="flex items-center justify-between cursor-pointer mb-8"
+              onClick={() => setIsClausesExpanded(!isClausesExpanded)}
+            >
+              <div className="flex items-center space-x-2">
+                <h2 className="text-2xl font-bold text-gray-900">Contract Clauses</h2>
+                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
+                  {analysis.clauses.length} {analysis.clauses.length === 1 ? 'clause' : 'clauses'}
+                </span>
+              </div>
+              <button
+                className={`p-2 rounded-full transition-transform duration-200 ${isClausesExpanded ? 'rotate-180' : ''}`}
+                aria-label={isClausesExpanded ? 'Collapse' : 'Expand'}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="text-gray-400"
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+            {isClausesExpanded && (
+              <ClauseGroup
+                clauses={analysis.clauses}
+              />
+            )}
+          </section>
         </div>
       )}
     </div>
