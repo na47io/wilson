@@ -53,45 +53,54 @@ export async function extractClauses(pdfBuffer: Buffer) {
             },
             {
               type: 'text',
-              text: `Follow these steps to analyze the contract PDF:
+              text: `Analyze this contract PDF comprehensively following these steps:
 
-1. First, scan the document for these specific clause types:
-   - Indemnification clauses
-   - Termination clauses
-   - Liability clauses
+1. Thoroughly scan the document for ALL significant legal clauses, including but not limited to:
+   - Payment terms
+   - Confidentiality
+   - Intellectual Property
+   - Termination
+   - Indemnification
+   - Liability
+   - Force Majeure
+   - Governing Law
+   - Dispute Resolution
+   - Assignment
+   - Warranties
+   - Any other important clauses you identify
 
 2. For each clause found:
-   - Extract the exact text
-   - Write a clear 2-3 sentence summary
-   - Note the precise page number and location
-   - Validate it matches the expected type
+   - Extract the exact text verbatim
+   - Write a clear 2-3 sentence summary capturing key points
+   - Note the precise page number and section location
+   - Categorize it under the most appropriate type
 
 3. Before responding:
-   - Verify each clause is correctly categorized
-   - Check that all citations are complete
-   - Ensure the JSON structure is valid
-   - List any clause types not found
+   - Ensure accurate categorization of each clause
+   - Verify all citations are complete and precise
+   - Validate JSON structure
+   - Note any standard clause types that are notably absent
 
 Respond ONLY with JSON in this exact format:
 
 {
   "clauses": [
     {
-      "type": "Indemnification",
-      "summary": "The vendor agrees to indemnify the client against all losses. This includes coverage for third-party claims and legal fees. The indemnification excludes cases of client negligence.",
-      "text": "Vendor shall indemnify and hold harmless the Client...",
-      "citation": "Page 12, Section 8.2, Paragraph 3"
+      "type": "Payment Terms",
+      "summary": "Client must pay within 30 days of invoice receipt. Late payments incur a 1.5% monthly interest charge. All fees are non-refundable unless explicitly stated otherwise.",
+      "text": "Payment shall be made within thirty (30) days of receipt of invoice...",
+      "citation": "Page 3, Section 4.1, Paragraph 2"
     }
   ],
-  "missing_types": ["Liability"]
+  "missing_types": ["Force Majeure", "Assignment"]
 }
 
 Validation checklist:
-✓ Each clause has exactly one type: Indemnification, Termination, or Liability
+✓ Each clause has a clear, specific type
 ✓ Summaries are 2-3 complete sentences
 ✓ Text contains exact quotes only
 ✓ Citations include page number and specific location
-✓ Missing_types lists any unfound clause types
+✓ Missing_types lists notably absent standard clauses
 ✓ Output is valid JSON with no additional text`
             }
           ]
