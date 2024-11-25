@@ -2,9 +2,22 @@
 
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { ClauseGroup } from '@/components/ClauseCard';
+
+interface Clause {
+  type: string;
+  summary: string;
+  text: string;
+  citation: string;
+}
+
+interface AnalysisResult {
+  clauses: Clause[];
+  missingTypes: string[];
+}
 
 export default function ClauseExtraction() {
-  const [analysis, setAnalysis] = useState<string | null>(null);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,6 +26,7 @@ export default function ClauseExtraction() {
 
     setLoading(true);
     setError(null);
+    setAnalysis(null);
     
     try {
       const formData = new FormData();
@@ -28,7 +42,7 @@ export default function ClauseExtraction() {
       }
 
       const data = await response.json();
-      setAnalysis(data.analysis);
+      setAnalysis(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -45,7 +59,7 @@ export default function ClauseExtraction() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-3xl font-bold mb-8">Contract Clause Extraction</h1>
       
       <div
@@ -63,20 +77,38 @@ export default function ClauseExtraction() {
 
       {loading && (
         <div className="mt-8 text-center">
-          <p className="text-gray-600">Analyzing contract...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
+          <p className="mt-4 text-gray-600">Analyzing contract...</p>
         </div>
       )}
 
       {error && (
         <div className="mt-8 p-4 bg-red-50 text-red-700 rounded-lg">
-          {error}
+          <div className="flex items-center space-x-2">
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2"
+              className="text-red-500"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{error}</span>
+          </div>
         </div>
       )}
 
       {analysis && (
-        <div className="mt-8 p-6 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Extracted Clauses</h2>
-          <div className="whitespace-pre-wrap">{analysis}</div>
+        <div className="mt-8">
+          <ClauseGroup 
+            clauses={analysis.clauses}
+            missingTypes={analysis.missingTypes}
+          />
         </div>
       )}
     </div>
