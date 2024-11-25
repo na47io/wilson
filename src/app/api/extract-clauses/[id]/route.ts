@@ -2,16 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAnalysis } from '@/lib/db';
 
 export async function GET(
-  request: NextRequest
+  _request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = request.nextUrl.searchParams.get('id');
-    if (!id) {
-      return NextResponse.json(
-        { error: 'ID parameter is required' },
-        { status: 400 }
-      );
-    }
+    const { id } = await context.params;
     const analysisId = parseInt(id);
     if (isNaN(analysisId)) {
       return NextResponse.json(

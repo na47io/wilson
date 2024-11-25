@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractClausesOpenAI } from '@/lib/openai';
 import { saveAnalysis } from '@/lib/db';
+import { AnalysisResult } from '@/lib/models';
 import pdf from 'pdf-parse';
 
 export async function POST(request: NextRequest) {
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Save to database
-    await saveAnalysis(file.name, result);
+    await saveAnalysis(file.name, result as AnalysisResult);
 
     return NextResponse.json(result);
   } catch (error) {
