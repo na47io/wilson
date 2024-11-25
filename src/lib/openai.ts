@@ -50,8 +50,8 @@ export async function extractClausesOpenAI(pdfBuffer: Buffer) {
       console.log(`Attempt ${attempts + 1} of ${MAX_RETRIES}`);
 
       const response = await openai.chat.completions.create({
-        model: "o1-preview",
-        response_format: { type: "json_object" },
+        model: "gpt-4-vision-preview",
+        response_format: { schema: ResponseSchema.shape },
         messages: [
           {
             role: "system",
