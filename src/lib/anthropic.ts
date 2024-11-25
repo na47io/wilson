@@ -27,7 +27,7 @@ async function delay(ms: number) {
 
 export async function extractClauses(pdfBuffer: Buffer) {
   let attempts = 0;
-  
+
   while (attempts < MAX_RETRIES) {
     try {
       console.log(`Attempt ${attempts + 1} of ${MAX_RETRIES}`);
@@ -99,7 +99,7 @@ Validation checklist:
       });
 
       console.log('Received response from Anthropic API');
-      
+
       const content = Array.isArray(message.content)
         ? message.content.map(item => item.text).join('\n')
         : message.content[0]?.text || '';
@@ -107,22 +107,23 @@ Validation checklist:
       // Try to parse and validate the JSON response
       const parsedContent = JSON.parse(content);
       const validatedContent = ResponseSchema.parse(parsedContent);
-      
+
       console.log('Successfully validated response format');
+      console.log(validatedContent)
       return validatedContent;
-      
+
     } catch (error) {
       attempts++;
       console.error(`Attempt ${attempts} failed:`, error);
-      
+
       if (attempts === MAX_RETRIES) {
         throw new Error('Failed to get valid response after maximum retries');
       }
-      
+
       // Wait before retrying
       await delay(RETRY_DELAY * attempts); // Exponential backoff
     }
   }
-  
+
   throw new Error('Failed to extract clauses'); // Fallback error
 }
