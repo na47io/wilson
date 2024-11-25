@@ -5,6 +5,7 @@ const anthropic = new Anthropic({
 });
 
 export async function extractClauses(pdfBuffer: Buffer) {
+  console.log('Preparing Anthropic API request');
   const message = await anthropic.beta.messages.create({
     model: 'claude-3-5-sonnet-20241022',
     betas: ["pdfs-2024-09-25"],
@@ -28,5 +29,6 @@ export async function extractClauses(pdfBuffer: Buffer) {
     }]
   });
 
+  console.log('Received response from Anthropic API');
   return message.content;
 }
