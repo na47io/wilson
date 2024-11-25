@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
+import { AnalysisResult } from '@/lib/models';
 
 let db: Database | null = null;
 
@@ -22,7 +23,7 @@ export async function getDb() {
   return db;
 }
 
-export async function saveAnalysis(filename: string, content: any) {
+export async function saveAnalysis(filename: string, content: AnalysisResult) {
   const db = await getDb();
   return db.run(
     'INSERT INTO analysis_results (filename, content) VALUES (?, ?)',

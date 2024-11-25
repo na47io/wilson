@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
-import { PDFDocument } from 'pdf-lib';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
