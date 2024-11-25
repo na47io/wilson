@@ -3,8 +3,13 @@ import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || 'dummy-key-for-build',
 });
+
+// Helper to check if we have a valid API key
+const hasValidApiKey = () => {
+  return process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'dummy-key-for-build';
+};
 
 const ClauseSchema = z.object({
   type: z.string(),
@@ -32,6 +37,10 @@ async function delay(ms: number) {
 }
 
 export async function extractClausesOpenAI(pdfText: string) {
+  if (!hasValidApiKey()) {
+    throw new Error('OpenAI API key is not configured');
+  }
+
   let attempts = 0;
 
   while (attempts < MAX_RETRIES) {
